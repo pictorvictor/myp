@@ -21,22 +21,19 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       populate: { products: true },
     });
     const sanitizedEntity = await this.sanitizeOutput(entry, ctx);
-    console.log(ctx.state.user);
     return this.transformResponse(sanitizedEntity);
   },
 
-  async create(ctx, next) {
+  async create(ctx) {
     // get user from context
-    console.log(ctx.state);
-    const user = ctx.state.user;
+    const user = ctx.req.dataFromGetUserMiddleware;
     // get request body data from context
     const { products } = ctx.request.body.data;
-    console.log(products);
     // use the create method from Strapi enitityService
     const order = await strapi.entityService.create("api::order.order", {
       data: {
         products,
-        // pass in the owner id to define the owner
+        // pass in the user id to define the owner
         user: user.id,
       },
     });

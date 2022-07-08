@@ -1,5 +1,4 @@
 "use strict";
-const cors = require("@koa/cors");
 
 /**
  * product router.
@@ -7,10 +6,25 @@ const cors = require("@koa/cors");
 
 const { createCoreRouter } = require("@strapi/strapi").factories;
 
+//custom getUser middleware
+const getUser = require("../../../middlewares/get-user-middleware");
+
 module.exports = createCoreRouter("api::product.product", {
   config: {
     find: {
-      middlewares: [cors()],
+      middlewares: [getUser],
+    },
+    findOne: {
+      middlewares: [getUser],
+    },
+    create: {
+      middlewares: [getUser],
+    },
+    update: {
+      middlewares: [getUser],
+    },
+    delete: {
+      middlewares: [getUser],
     },
   },
 });
